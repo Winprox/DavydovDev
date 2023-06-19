@@ -35,7 +35,7 @@ export const Card: FC<TCard> = ({
   ...p
 }) => {
   const boundsRef = useRef<DOMRect>();
-  const cardRef = useRef<HTMLImageElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
 
   const rotateToMouse = useCallback(
@@ -49,17 +49,16 @@ export const Card: FC<TCard> = ({
 
       if (rotateFactor !== 0) {
         const distance = Math.sqrt(center.x ** 2 + center.y ** 2);
-        cardRef.current.style.transform = `rotate3d(${center.y / 100}, ${
-          -center.x / 100
-        }, 0, ${Math.log(distance) * rotateFactor}deg)`;
+        cardRef.current.style.transform = `rotate3d(${center.y / 100}, 
+        ${-center.x / 100}, 0, ${Math.log(distance) * rotateFactor}deg)`;
       }
 
       if (!glowRef.current || !glow) return;
       glowRef.current.style.background = `radial-gradient(circle at
-      ${center.x * 2 + boundsRef.current.width / 2}px
-      ${center.y * 2 + boundsRef.current.height / 2}px,
-      ${theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)'},
-      rgba(0, 0, 0, 0))`;
+      ${center.x + boundsRef.current.width / 2}px
+      ${center.y + boundsRef.current.height / 2}px,
+      rgba(${theme === 'dark' ? '255, 255, 255, 0.05' : '255, 0, 255, 0.05'}),
+      transparent, transparent)`;
 
       onMouseMove?.(e);
     },

@@ -17,18 +17,9 @@ const ModalChild: FC = () => (
 );
 
 type Story = StoryObj<typeof meta>;
-export const Default: Story = {
-  render: (p) => <Component {...p} />,
-  args: {
-    className: 'w-full h-full flex items-center justify-center',
-    children: <ModalChild />,
-  },
-};
+const args = {  className: 'w-full h-full flex items-center justify-center',  children: <ModalChild />,}; // prettier-ignore
+export const Default: Story = { render: (p) => <Component {...p} />, args };
 export const Dim: Story = {
   render: (p) => <Component {...p} />,
-  args: {
-    className: 'w-full h-full flex items-center justify-center',
-    children: <ModalChild />,
-    backdropProps: { variant: 'dim' },
-  },
+  args: { ...args, backdropProps: { variant: 'dim' } },
 };

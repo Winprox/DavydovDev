@@ -228,7 +228,7 @@ export const projects: Project[] = [
           onClick={() => openNewTab(hauntedManorUrl)}
         >
           <TiDownload size={20} />
-          Скачать (Windows/Mac/Linux)
+          Скачать игру (Windows/Mac/Linux)
         </Button>
       </div>
     ),

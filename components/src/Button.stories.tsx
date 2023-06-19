@@ -5,9 +5,15 @@ const meta = { title: 'Button', component: Button } satisfies Meta<typeof Button
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-export const Default: Story = { args: { children: 'Default' } };
-export const DefaultDisabled: Story = { args: { disabled: true, children: 'Default' } };
-export const Outline: Story = { args: { children: 'Outline', variant: 'outline' } };
+export const Default: Story = {
+  args: { children: 'Default' },
+};
+export const DefaultDisabled: Story = {
+  args: { disabled: true, children: 'Default' },
+};
+export const Outline: Story = {
+  args: { children: 'Outline', variant: 'outline' },
+};
 export const OutlineDark: Story = {
   args: { children: 'Outline', variant: 'outline', theme: 'dark' },
 };
@@ -17,7 +23,9 @@ export const OutlineDisabled: Story = {
 export const OutlineDisabledDark: Story = {
   args: { disabled: true, children: 'Outline', variant: 'outline', theme: 'dark' },
 };
-export const Transparent: Story = { args: { children: 'X', variant: 'transparent' } };
+export const Transparent: Story = {
+  args: { children: 'X', variant: 'transparent' },
+};
 export const TransparentDark: Story = {
   args: { children: 'X', variant: 'transparent', theme: 'dark' },
 };

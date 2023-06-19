@@ -28,6 +28,7 @@ export const MarkDown: FC<Options & { theme?: 'light' | 'dark' | null }> = ({
           <li {...p} />
         </div>
       ),
+      ...props.components,
     }}
     className={cm(
       'cursor-default',

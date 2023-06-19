@@ -29,10 +29,10 @@ type Props = {
 };
 export type TModal = Omit<HTMLAttributes<HTMLDivElement>, keyof Props> & Props;
 export const Modal: FC<TModal> = ({
-  fadeIn = true,
   backdropProps,
-  rootName,
   className,
+  rootName,
+  fadeIn = true,
   ...p
 }) => {
   const modalComponent = (

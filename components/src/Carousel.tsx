@@ -4,16 +4,13 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Button, cm } from '.';
 import './Carousel.css';
 
-export const Carousel: FC<Partial<InternalCarouselProps> & { defaultImageHeight?: number }> = (
-  p
-) => {
+export const Carousel: FC<Partial<InternalCarouselProps>> = (p) => {
+  const carouselRef = useRef<HTMLDivElement>(null);
   const [hover, setHover] = useState(false);
   const twoSlidesPerView = useMemo(() => p.slidesToShow === 2, [p.slidesToShow]);
   const fit = useMemo(() => {
     return Array.isArray(p.children) && p.children.length <= (p.slidesToShow ?? 1);
   }, [p.children, p.slidesToShow]);
-
-  const carouselRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
@@ -30,7 +27,7 @@ export const Carousel: FC<Partial<InternalCarouselProps> & { defaultImageHeight?
             <Button
               variant='circle'
               className={cm(
-                !twoSlidesPerView && 'ml-6',
+                !twoSlidesPerView && 'ml-4 sm:ml-12',
                 'h-14 animate-aFadeInScale text-white disabled:text-white sm:flex',
                 'disabled:cursor-pointer disabled:opacity-0 hover:disabled:opacity-0'
               )}
@@ -47,7 +44,7 @@ export const Carousel: FC<Partial<InternalCarouselProps> & { defaultImageHeight?
             <Button
               variant='circle'
               className={cm(
-                !twoSlidesPerView && 'mr-6',
+                !twoSlidesPerView && 'mr-4 sm:mr-12',
                 'h-14 animate-aFadeInScale text-white disabled:text-white sm:flex',
                 'disabled:cursor-pointer disabled:opacity-0 hover:disabled:opacity-0'
               )}

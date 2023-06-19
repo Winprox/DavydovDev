@@ -12,8 +12,5 @@ const Component: FC<TShimmer> = (p) => (
 );
 
 type Story = StoryObj<typeof meta>;
-export const Dark: Story = { render: (p) => <Component {...p} /> };
-export const Light: Story = {
-  render: (p) => <Component {...p} />,
-  args: { theme: 'light' },
-};
+export const Light: Story = { render: (p) => <Component {...p} /> };
+export const Dark: Story = { render: (p) => <Component {...p} />, args: { theme: 'dark' } };

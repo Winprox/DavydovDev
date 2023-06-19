@@ -11,11 +11,11 @@ export type TProjectModal = {
   desc?: string;
   images?: string[];
   footer?: string;
+  actions?: ReactNode;
   stack?: TStackItem[];
   modalProps?: TModal;
   carouselProps?: Partial<InternalCarouselProps>;
   imageProps?: TImage;
-  actions?: ReactNode;
   onClose?: () => void;
 };
 
@@ -88,7 +88,10 @@ export const ProjectModal: FC<TProjectModal> = ({ onClose, ...p }) => {
                       key={i}
                       src={v}
                       theme={p.theme}
-                      className='pointer-events-none select-none'
+                      className={cm(
+                        'pointer-events-none select-none',
+                        p.imageProps?.className
+                      )}
                       wrapperProps={{
                         ...p.imageProps?.wrapperProps,
                         className: cm(
@@ -97,18 +100,17 @@ export const ProjectModal: FC<TProjectModal> = ({ onClose, ...p }) => {
                           p.imageProps?.wrapperProps?.className
                         ),
                       }}
-                      onLoad={() => setShimmer(false)}
+                      onLoad={() => {
+                        setShimmer(false);
+                        p.imageProps?.onLoad?.();
+                      }}
                     />
                   ))}
                 </Carousel>
               </div>
             )}
             <div className='p-4'>
-              {p.title && (
-                <div className={cm('cursor-default pb-3 text-lg font-bold')}>
-                  <h2>{p.title}</h2>
-                </div>
-              )}
+              {p.title && <h2 className='cursor-default pb-3 text-lg font-bold'>{p.title}</h2>}
               {<MarkDown theme={p.theme}>{about}</MarkDown>}
             </div>
           </div>
@@ -122,7 +124,7 @@ export const ProjectModal: FC<TProjectModal> = ({ onClose, ...p }) => {
             {p.stack && (
               <div
                 className={cm(
-                  'flex flex-wrap justify-center gap-2 px-4 pb-6 pt-2 transition-all sm:hidden'
+                  'flex flex-wrap justify-center gap-2 px-4 pb-10 pt-2 transition-all sm:hidden'
                 )}
               >
                 {p.stack?.map((i) => (

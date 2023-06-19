@@ -24,14 +24,14 @@ export const ProjectCard: FC<TProjectCard> = ({
     <Image shadow className='h-[40%]' theme={theme} src={image} />
     <div className='flex-1 overflow-hidden p-3'>
       {title && (
-        <div className='text-lg font-bold leading-6'>
-          <MarkDown theme={theme}>{title}</MarkDown>
-        </div>
+        <MarkDown theme={theme} className='text-lg font-bold leading-6'>
+          {title}
+        </MarkDown>
       )}
       {desc && (
-        <div className='pt-2 leading-5'>
-          <MarkDown theme={theme}>{desc}</MarkDown>
-        </div>
+        <MarkDown theme={theme} className='pt-2 leading-5'>
+          {desc}
+        </MarkDown>
       )}
     </div>
     {stack && (

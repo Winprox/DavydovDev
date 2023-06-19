@@ -56,7 +56,7 @@ export const Image: FC<TImage> = ({
         wrapperProps?.className
       )}
     >
-      {p.src && loaded && blurred && (
+      {loaded && blurred && (
         <div
           className={cm(
             'absolute h-full w-full animate-aFadeInSlow backdrop-blur-sm',

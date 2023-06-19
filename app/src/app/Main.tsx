@@ -67,7 +67,8 @@ export default () => {
   //? Получить id проекта из ссылки
   useEffect(() => {
     setSelectedProjectId(pathname.length > 1 ? pathname.substring(1) : undefined);
-  }, [pathname, setSelectedProjectId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   //? Сменить ссылку и заголовок документа при выборе id проекта
   useEffect(() => {
@@ -100,7 +101,7 @@ export default () => {
             tabIndex={-1}
             key={String(fabScrollUp)}
             variant='circlePrimary'
-            className='z-50 m-4 h-14 animate-aFadeInScale'
+            className='z-40 m-4 h-14 animate-aFadeInScale'
             onClick={() =>
               fabScrollUp
                 ? contentRef.current?.scrollIntoView({ behavior: 'smooth' })

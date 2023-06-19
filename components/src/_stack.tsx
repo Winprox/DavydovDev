@@ -67,7 +67,7 @@ export const Stack = {
     url: 'https://github.com/Leaflet/Leaflet',
   },
   reactTable: {
-    icon: <SiReacttable title='React Table: Манипулирование табличными данным' size={20} />,
+    icon: <SiReacttable title='TanStack Table: Манипулирование табличными данным' size={20} />,
     url: 'https://github.com/TanStack/table',
   },
   reactRouter: {
