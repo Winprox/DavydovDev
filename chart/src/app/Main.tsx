@@ -27,6 +27,8 @@ export default () => {
     [showPrefs]
   );
 
+  const objectSet = dataStore((s) => s.config.setObject);
+  const chartDatesFromBounds = dataStore((s) => s.dates.setBounds);
   const autoStartTime = dataStore((s) => s.config.autoStartTime);
   const autoStartTimeToggle = dataStore((s) => s.config.toggleAutoStartTime);
   const typesCount = dataStore((s) => s.config.typesCount);
@@ -36,16 +38,13 @@ export default () => {
   const topObjectsConfig = dataStore((s) => s.config.topObjects);
   const topObjectsConfigSet = dataStore((s) => s.config.setTopObjects);
 
-  const objectSet = dataStore((s) => s.config.setObject);
-  const chartDatesFromBounds = dataStore((s) => s.dates.setBounds);
   const [fetchInterval, setFetchInterval] = useState(0);
-  const fetch = dataStore((s) => s.types.fetch);
-  const typesLoading = dataStore((s) => s.types.loading);
-  const objectsLoading = dataStore((s) => s.objects.loading);
-  const topObjectsLoading = dataStore((s) => s.topObjects.loading);
-  const loading = useMemo(() => {
-    return typesLoading || objectsLoading || topObjectsLoading;
-  }, [typesLoading, objectsLoading, topObjectsLoading]);
+  const [loading, setLoading] = useState(false);
+  const _fetch = dataStore((s) => s.types.fetch);
+  const fetch = useCallback(() => {
+    setLoading(true);
+    setTimeout(() => _fetch(), 100); //? Подождать анимацию кнопки
+  }, [_fetch]);
 
   const xScale = bufferStore((s) => s.xScale);
   const xScaleSet = bufferStore((s) => s.setXScale);
@@ -299,10 +298,12 @@ export default () => {
 
   useEffect(() => {
     linesRender();
+    setLoading(false);
   }, [object, objectsTimeMap, linesRender]);
 
   useEffect(() => {
     linesRenderTop();
+    setLoading(false);
   }, [object, topObjectsTimeMap, linesRenderTop]);
 
   useEffect(() => {
@@ -551,7 +552,7 @@ export default () => {
                 </div>
               </div>
               <button
-                className='transition-all disabled:cursor-not-allowed disabled:opacity-50'
+                className='transition-all disabled:opacity-50'
                 disabled={!object}
                 onClick={() => objectSet()}
               >

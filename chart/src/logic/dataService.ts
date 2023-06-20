@@ -3,11 +3,10 @@ import { TObject, TObjectPoint, TObjectTop, TObjectsConfig, TTopObjectsConfig, T
 export const MS_IN_MIN = 60000;
 const COLORS = [0xec407a, 0xab47bc, 0x66bb6a, 0xffa726];
 
-export const getTypes = async (typesCount: number) => {
-  return Array.from({ length: typesCount }, (_, id) => {
+export const getTypes = async (typesCount: number) =>
+  Array.from({ length: typesCount }, (_, id) => {
     return { id, title: `Категория #${id}`, color: COLORS[id % COLORS.length] };
   }) as TType[];
-};
 
 export const getObjects = async (types: TType[], config: TObjectsConfig) => {
   const map = new Map<string, TObject>();
@@ -69,8 +68,8 @@ export const getTopObjects = async (
   return map;
 };
 
-const rndBetween = (min: number, max: number) => {
-  const minToUse = min < max ? min : max;
-  const maxToUse = max > min ? max : min;
-  return minToUse + Math.floor(Math.random() * (maxToUse - minToUse));
+const rndBetween = (num1: number, num2: number) => {
+  const min = Math.min(num1, num2);
+  const max = Math.max(num1, num2);
+  return min + Math.floor(Math.random() * (max - min));
 };

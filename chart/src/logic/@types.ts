@@ -49,11 +49,6 @@ export type TObjectPrimitive = {
   to: Point;
 };
 
-export const isDataPrimitive = (obj: TObjectDataPrimitive | TObjectPrimitive) =>
-  (obj as any).point ? (obj as TObjectDataPrimitive) : undefined;
-export const isObjectPrimitive = (obj: TObjectDataPrimitive | TObjectPrimitive) =>
-  (obj as any).from ? (obj as TObjectPrimitive) : undefined;
-
 export type TObjectTopPrimitive = {
   id: string;
   color: number;

@@ -1,10 +1,11 @@
 import { Point } from 'pixi.js';
 import { Fragment } from 'react';
+import { create } from 'zustand';
 import { Y_AXIS_WIDTH } from '../app/Main';
 import { AxisEntry, BGText, GridLine, Line, Operations, TViewportBounds } from '../components';
 import { TObjectDataPrimitive, TObjectPrimitive, TObjectTopPrimitive, TType } from './@types';
 import { KM_GRID_STEP, TIME_GRID_STEP, dataStore } from './dataStore';
-import { TStore, create, proxy } from './zustand';
+import { proxy } from './zustand';
 
 type Grid = { kms: number[][]; kmsIndexes: number[]; times: number[][]; timesKeys: string[] };
 const GRID_DEFAULT: Grid = { kms: [], kmsIndexes: [], times: [], timesKeys: [] };
@@ -111,7 +112,7 @@ type TState = {
   };
 };
 
-export const bufferStore: TStore<TState> = create<TState>((set, get) => ({
+export const bufferStore = create<TState>((set, get) => ({
   ...STATE_DEFAULT,
   linesRender: (gridAdded) => {
     const map = get().linesMap;

@@ -9,11 +9,9 @@ const dateDay = (date: Date) =>
       date.getTimezoneOffset() * MS_IN_MIN
   );
 
-const MIN_IN_HOUR = 60;
 const MAX_AVAILABLE_KM = 1e5;
 export const KM_GRID_STEP = 100;
-export const TIME_GRID_STEP = MIN_IN_HOUR * 24;
-const INIT_DATE = dateDay(new Date());
+export const TIME_GRID_STEP = 60 * 24;
 
 const DEFAULT_TYPE_COUNT = 3;
 const DEFAULT_OBJECTS_CONFIG: TObjectsConfig = {
@@ -72,6 +70,7 @@ type TState = {
     from?: number;
     to?: number;
     setBounds: (from?: number, to?: number) => void;
+    toConfig: (fromAutoStartTimeChange?: boolean) => void;
   };
 };
 
@@ -132,25 +131,23 @@ export const dataStore: TStore<TState> = create<TState>(
 
         //? Лейблы и линии соединения
         const setData = (id: string, color: number, p: TObjectPoint, title?: string) => {
-          const kKey = Math.ceil(p.km / KM_GRID_STEP);
-          const tKey = Math.floor(p.time / TIME_GRID_STEP) * TIME_GRID_STEP;
-          const key = `${tKey},${tKey + TIME_GRID_STEP}`;
-
           const point = new Point(p.time, p.km);
           const obj: TObjectDataPrimitive = { id, color, point, title };
 
+          const kKey = Math.ceil(p.km / KM_GRID_STEP);
+          const tKey = Math.floor(p.time / TIME_GRID_STEP) * TIME_GRID_STEP;
+          const key = `${tKey},${tKey + TIME_GRID_STEP}`;
           timeMap[kKey].set(key, [...(timeMap[kKey].get(key) ?? []), obj]);
         };
 
         //? Линии
         const setLine = (id: string, color: number, p1: TObjectPoint, p2: TObjectPoint) => {
-          const kKey = Math.ceil(p1.km / KM_GRID_STEP);
-          const tKey = Math.floor(p1.time / TIME_GRID_STEP) * TIME_GRID_STEP;
-
           const from = new Point(p1.time, p1.km);
           const to = new Point(p2.time, p2.km);
           const obj: TObjectPrimitive = { id, color, from, to };
 
+          const kKey = Math.ceil(p1.km / KM_GRID_STEP);
+          const tKey = Math.floor(p1.time / TIME_GRID_STEP) * TIME_GRID_STEP;
           const key = `${tKey},${tKey + TIME_GRID_STEP}`;
           timeMap[kKey].set(key, [...(timeMap[kKey].get(key) ?? []), obj]);
         };
@@ -216,15 +213,21 @@ export const dataStore: TStore<TState> = create<TState>(
       },
     },
     dates: {
-      start: INIT_DATE,
+      start: dateDay(new Date()),
       from: undefined,
       to: undefined,
       setBounds: (from, to) => set((s) => ({ dates: { ...s.dates, from, to } })),
+      toConfig: (fromAutoStartTimeChange) => {
+        const { from, to } = get().dates;
+        const { autoStartTime, setObjects } = get().config;
+        if ((!autoStartTime && !fromAutoStartTimeChange) || !from || !to) return;
+        setObjects({ startTime: [from, to] });
+      },
     },
   }),
   //? Рассчитывает относительное время прибытия
-  [(s) => s.dates.from, () => chartDatesToConfig()],
-  [(s) => s.config.autoStartTime, () => chartDatesToConfig(true)],
+  [(s) => s.dates.from, () => dataStore.getState().dates.toConfig()],
+  [(s) => s.config.autoStartTime, () => dataStore.getState().dates.toConfig(true)],
   //? Сбрасывает выбранный объект при загрузке topObjects
   [(s) => s.topObjects.loading, (v) => !v && dataStore.getState().config.setObject()],
   //? Запрашивает objects при загрузке types
@@ -235,11 +238,3 @@ export const dataStore: TStore<TState> = create<TState>(
   [(s) => s.objects.map, () => dataStore.getState().objects.prepareForChart()],
   [(s) => s.topObjects.map, () => dataStore.getState().topObjects.prepareForChart()]
 );
-
-const chartDatesToConfig = (fromAutoStartTimeChange?: boolean) => {
-  const from = dataStore.getState().dates.from;
-  const to = dataStore.getState().dates.to;
-  if ((!dataStore.getState().config.autoStartTime && !fromAutoStartTimeChange) || !from || !to)
-    return;
-  dataStore.getState().config.setObjects({ startTime: [from, to] });
-};

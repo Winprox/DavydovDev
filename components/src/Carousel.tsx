@@ -1,5 +1,5 @@
 import NCarousel, { InternalCarouselProps } from 'nuka-carousel';
-import { FC, useMemo, useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { Button, cm } from '.';
 import './Carousel.css';
@@ -7,10 +7,8 @@ import './Carousel.css';
 export const Carousel: FC<Partial<InternalCarouselProps>> = (p) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [hover, setHover] = useState(false);
-  const twoSlidesPerView = useMemo(() => p.slidesToShow === 2, [p.slidesToShow]);
-  const fit = useMemo(() => {
-    return Array.isArray(p.children) && p.children.length <= (p.slidesToShow ?? 1);
-  }, [p.children, p.slidesToShow]);
+  const twoSlidesPerView = p.slidesToShow === 2;
+  const fit = Array.isArray(p.children) && p.children.length <= (p.slidesToShow ?? 1);
 
   return (
     <div

@@ -91,10 +91,8 @@ export const Operations: FC<TOperations> = ({
     []
   );
 
-  const alphaToUse = useMemo(() => alpha / (p.dimmed ? 3 : 1), [p.dimmed, alpha]);
-  const colorToUse = useMemo(() => {
-    return p.selected ? p.selectedColor : p.color;
-  }, [p.selected, p.color, p.selectedColor]);
+  const alphaToUse = alpha / (p.dimmed ? 3 : 1);
+  const colorToUse = p.selected ? p.selectedColor : p.color;
 
   useEffect(() => {
     setOpersHover(new Array(opersHover.length).fill(false));
