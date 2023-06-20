@@ -1,8 +1,8 @@
 import { Point } from 'pixi.js';
 import { Fragment } from 'react';
 import { Y_AXIS_WIDTH } from '../app/Main';
-import { AxisEntry, BGText, GridLine, Line, Operations, TViewportBounds } from '../components'; // prettier-ignore
-import { TObjectDataPrimitive, TObjectPrimitive, TObjectTopPrimitive, TType, } from './@types'; // prettier-ignore
+import { AxisEntry, BGText, GridLine, Line, Operations, TViewportBounds } from '../components';
+import { TObjectDataPrimitive, TObjectPrimitive, TObjectTopPrimitive, TType } from './@types';
 import { KM_GRID_STEP, TIME_GRID_STEP, dataStore } from './dataStore';
 import { TStore, create, proxy } from './zustand';
 
@@ -11,8 +11,9 @@ const GRID_DEFAULT: Grid = { kms: [], kmsIndexes: [], times: [], timesKeys: [] }
 type GridTop = { types: number[] };
 const GRID_TOP_DEFAULT: GridTop = { types: [] };
 
-export const MLN = 1000000;
-const MS_IN_MIN = 60000;
+export const MLN = 1e6;
+export const MS_IN_SEC = 1000;
+const MS_IN_MIN = 60 * MS_IN_SEC;
 const MIN_IN_DAY = 60 * 24;
 const MS_IN_DAY = MS_IN_MIN * MIN_IN_DAY;
 const SELECTED_COLOR = 0xffffff;
@@ -437,16 +438,6 @@ export const bufferStore: TStore<TState> = create<TState>((set, get) => ({
 
     const gridCurrent = { kms, kmsIndexes, times, timesKeys };
     set((s) => ({ gridCurrent, gridPrev: s.gridCurrent }));
-
-    //? Пересчитать gridCurrent, но не считать gridAdded
-    if (fromScale) {
-      clearTimeout(gridFromScaleTimeoutId);
-      gridFromScaleTimeoutId = setTimeout(() => {
-        set({ fromScale: false });
-        get().gridGenerate(bounds);
-      }, 250);
-      return;
-    }
 
     const gridPrev = get().gridPrev;
 

@@ -1,6 +1,6 @@
 import { Point } from 'pixi.js';
-import { TObject, TObjectDataPrimitive, TObjectPoint, TObjectPrimitive, TObjectTop, TObjectTopPrimitive, TObjectsConfig, TTopObjectsConfig, TType, } from './@types'; // prettier-ignore
-import { getObjects, getTopObjects, getTypes, } from './dataService'; // prettier-ignore
+import { TObject, TObjectDataPrimitive, TObjectPoint, TObjectPrimitive, TObjectTop, TObjectTopPrimitive, TObjectsConfig, TTopObjectsConfig, TType } from './@types'; // prettier-ignore
+import { MS_IN_MIN, getObjects, getTopObjects, getTypes } from './dataService';
 import { TStore, create } from './zustand';
 
 const dateDay = (date: Date) =>
@@ -9,15 +9,13 @@ const dateDay = (date: Date) =>
       date.getTimezoneOffset() * MS_IN_MIN
   );
 
-const MS_IN_MIN = 60000;
 const MIN_IN_HOUR = 60;
-const MAX_AVAILABLE_KM = 100000;
+const MAX_AVAILABLE_KM = 1e5;
 export const KM_GRID_STEP = 100;
 export const TIME_GRID_STEP = MIN_IN_HOUR * 24;
 const INIT_DATE = dateDay(new Date());
 
 const DEFAULT_TYPE_COUNT = 3;
-
 const DEFAULT_OBJECTS_CONFIG: TObjectsConfig = {
   objectsCount: [10, 75],
   pointsCount: [50, 100],
@@ -29,7 +27,6 @@ const DEFAULT_OBJECTS_CONFIG: TObjectsConfig = {
   notArrivedChance: 10,
   notArrivedKm: [1, 500],
 };
-
 const DEFAULT_TOP_OBJECTS_CONFIG: TTopObjectsConfig = {
   opersCount: [2, 10],
   opersLength: [1, 100],
@@ -225,7 +222,7 @@ export const dataStore: TStore<TState> = create<TState>(
       setBounds: (from, to) => set((s) => ({ dates: { ...s.dates, from, to } })),
     },
   }),
-  //? Рассчитывает относительное время прибытия по
+  //? Рассчитывает относительное время прибытия
   [(s) => s.dates.from, () => chartDatesToConfig()],
   [(s) => s.config.autoStartTime, () => chartDatesToConfig(true)],
   //? Сбрасывает выбранный объект при загрузке topObjects

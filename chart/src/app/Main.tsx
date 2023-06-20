@@ -1,29 +1,31 @@
-import { Stage } from '@pixi/react';
+import { Stage, _ReactPixi } from '@pixi/react';
 import { Point } from 'pixi.js';
-import { ChangeEvent, MouseEvent, WheelEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'; // prettier-ignore
+import { ChangeEvent, MouseEvent, WheelEvent, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'; // prettier-ignore
 import { MdExtension, MdExtensionOff } from 'react-icons/md';
+import lmb from '../assets/lmb.svg';
+import scroll from '../assets/scroll.svg';
 import { ConfigLine, Line, TViewportBounds, TViewportRef, Viewport } from '../components';
 import { TObjectsConfig, TTopObjectsConfig } from '../logic/@types';
-import { MLN, bufferStore } from '../logic/bufferStore';
+import { MLN, MS_IN_SEC, bufferStore } from '../logic/bufferStore';
 import { dataStore } from '../logic/dataStore';
 
 const aboutUrl = 'https://davydovdev.com/rail-dispatcher';
 
-const BOUNDS_DELAY = 75;
 const X_AXIS_HEIGHT = 30;
 export const Y_AXIS_WIDTH = 110;
-const MS_IN_SEC = 1000;
 const STAGE_CONFIG = {
   antialias: true,
   powerPreference: 'high-performance',
   background: 0x222034,
-} as any;
-
-let boundsTimeoutId: NodeJS.Timeout | undefined = undefined;
-let boundsTopTimeoutId: NodeJS.Timeout | undefined = undefined;
+} as _ReactPixi.IStage;
 
 export default () => {
   const [showPrefs, setShowPrefs] = useState(false);
+  const toggleShowPrefs = useCallback(() => setShowPrefs((s) => !s), []);
+  const showPrefsIcon = useMemo(
+    () => (showPrefs ? <MdExtensionOff size={24} /> : <MdExtension size={24} />),
+    [showPrefs]
+  );
 
   const autoStartTime = dataStore((s) => s.config.autoStartTime);
   const autoStartTimeToggle = dataStore((s) => s.config.toggleAutoStartTime);
@@ -38,12 +40,12 @@ export default () => {
   const chartDatesFromBounds = dataStore((s) => s.dates.setBounds);
   const [fetchInterval, setFetchInterval] = useState(0);
   const fetch = dataStore((s) => s.types.fetch);
-  const otLoading = dataStore((s) => s.types.loading);
-  const oLoading = dataStore((s) => s.objects.loading);
-  const toLoading = dataStore((s) => s.topObjects.loading);
+  const typesLoading = dataStore((s) => s.types.loading);
+  const objectsLoading = dataStore((s) => s.objects.loading);
+  const topObjectsLoading = dataStore((s) => s.topObjects.loading);
   const loading = useMemo(() => {
-    return otLoading || oLoading || toLoading;
-  }, [otLoading, oLoading, toLoading]);
+    return typesLoading || objectsLoading || topObjectsLoading;
+  }, [typesLoading, objectsLoading, topObjectsLoading]);
 
   const xScale = bufferStore((s) => s.xScale);
   const xScaleSet = bufferStore((s) => s.setXScale);
@@ -66,7 +68,7 @@ export default () => {
   const yAxisLines = bufferStore((s) => s.yAxisLinesBuffer);
   const yAxisTop = bufferStore((s) => s.yAxisTopBuffer);
   const yAxisLinesTop = bufferStore((s) => s.yAxisTopLinesBuffer);
-  const length =
+  const objectsInBuffer =
     lines.length +
     linesTop.length +
     xAxis.length +
@@ -107,7 +109,7 @@ export default () => {
   const xyTopMovingEnable = useCallback(() => setXYTopMoving(true), []);
   const xyTopMovingDisable = useCallback(() => setXYTopMoving(false), []);
 
-  const typeChangeHandler = useCallback(
+  const typesCountChangeHandler = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const val = +e.target.value;
       if (!Number.isInteger(val) || val < 0) return;
@@ -126,46 +128,38 @@ export default () => {
   );
 
   const objectsConfigChangeHandler = useCallback(
-    (e: ChangeEvent<HTMLInputElement>, value: keyof TObjectsConfig, place = 0) => {
+    (
+      e: ChangeEvent<HTMLInputElement>,
+      valKey: keyof TObjectsConfig | keyof TTopObjectsConfig,
+      place = 0
+    ) => {
+      const topObject = ['opersCount', 'opersLength'].includes(valKey);
       const val = +e.target.value;
       if (
         !Number.isInteger(val) ||
-        (val < 0 && value !== 'startTime') ||
-        (['stayingChance', 'notArrivedChance'].includes(value) && val > 100)
+        (['startTime', 'opersCount', 'opersLength'].includes(valKey) && val < 0) ||
+        (['stayingChance', 'notArrivedChance'].includes(valKey) && val > 100)
       )
         return;
 
-      let configValue = objectsConfig?.[value];
+      let configValue = topObject
+        ? topObjectsConfig?.[valKey as keyof TTopObjectsConfig]
+        : objectsConfig?.[valKey as keyof TObjectsConfig];
       if (configValue === undefined) return;
 
       if (Array.isArray(configValue)) configValue[place] = val;
       else configValue = val;
 
-      objectsConfigSet({ [value]: configValue });
+      if (topObject) topObjectsConfigSet({ [valKey]: configValue });
+      else objectsConfigSet({ [valKey]: configValue });
     },
-    [objectsConfig, objectsConfigSet]
-  );
-
-  const topObjectsConfigChangeHandler = useCallback(
-    (e: ChangeEvent<HTMLInputElement>, value: keyof TTopObjectsConfig, place = 0) => {
-      const val = +e.target.value;
-      if (!Number.isInteger(val) || val < 0) return;
-
-      const configValue = topObjectsConfig?.[value];
-      if (configValue === undefined) return;
-      configValue[place] = val;
-
-      topObjectsConfigSet({ [value]: configValue });
-    },
-    [topObjectsConfig, topObjectsConfigSet]
+    [objectsConfig, topObjectsConfig, objectsConfigSet, topObjectsConfigSet]
   );
 
   const xScaleHandler = useCallback(
     (e: WheelEvent) => {
       setXMoving(false);
       xScaleSet(e.deltaY < 0);
-      clearTimeout(boundsTimeoutId);
-      clearTimeout(boundsTopTimeoutId);
     },
     [xScaleSet]
   );
@@ -174,7 +168,6 @@ export default () => {
     (e: WheelEvent) => {
       setYMoving(false);
       yScaleSet(e.deltaY < 0);
-      clearTimeout(boundsTimeoutId);
     },
     [yScaleSet]
   );
@@ -183,7 +176,6 @@ export default () => {
     (e: WheelEvent) => {
       setYTopMoving(false);
       yScaleTopSet(e.deltaY < 0);
-      clearTimeout(boundsTopTimeoutId);
     },
     [yScaleTopSet]
   );
@@ -194,8 +186,6 @@ export default () => {
       setYMoving(false);
       xScaleSet(e.deltaY < 0);
       yScaleSet(e.deltaY < 0);
-      clearTimeout(boundsTimeoutId);
-      clearTimeout(boundsTopTimeoutId);
     },
     [xScaleSet, yScaleSet]
   );
@@ -206,8 +196,6 @@ export default () => {
       setYTopMoving(false);
       xScaleSet(e.deltaY < 0);
       yScaleTopSet(e.deltaY < 0);
-      clearTimeout(boundsTimeoutId);
-      clearTimeout(boundsTopTimeoutId);
     },
     [xScaleSet, yScaleTopSet]
   );
@@ -274,14 +262,17 @@ export default () => {
   }, [bounds, chartDatesFromBounds]);
 
   //? Генерирует при смене интервала / запуске
+  const [initRender, setInitRender] = useState(true);
   useEffect(() => {
     let intervalId: number | undefined = undefined;
     if (fetchInterval > 0) intervalId = window.setInterval(fetch, fetchInterval * MS_IN_SEC);
     else {
-      setTimeout(fetch, 250);
+      setTimeout(fetch, initRender ? 500 : 0);
       clearInterval(intervalId);
+      setInitRender(false);
     }
     return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchInterval, fetch]);
 
   //? Рендеринг
@@ -319,13 +310,12 @@ export default () => {
     reRenderTop();
   }, [types, render, reRenderTop]);
 
-  useEffect(() => {
-    if (bounds) boundsTimeoutId = setTimeout(() => gridGenerate(bounds), BOUNDS_DELAY);
+  useLayoutEffect(() => {
+    if (bounds) gridGenerate(bounds);
   }, [bounds, gridGenerate]);
 
-  useEffect(() => {
-    if (boundsTop)
-      boundsTopTimeoutId = setTimeout(() => gridGenerateTop(boundsTop), BOUNDS_DELAY);
+  useLayoutEffect(() => {
+    if (boundsTop) gridGenerateTop(boundsTop);
   }, [boundsTop, gridGenerateTop]);
 
   return (
@@ -420,7 +410,7 @@ export default () => {
                   title='Количество категорий'
                   value={typesCount}
                   disabled={loading}
-                  onChange={typeChangeHandler}
+                  onChange={typesCountChangeHandler}
                 />
                 <ConfigLine
                   title='Объектов в катег.'
@@ -467,7 +457,7 @@ export default () => {
                   <input
                     className='w-4 accent-aTextWhite'
                     type='checkbox'
-                    checked={autoStartTime}
+                    defaultChecked={autoStartTime}
                     onClick={autoStartTimeToggle}
                   />
                 </div>
@@ -495,15 +485,15 @@ export default () => {
                   title='Операций в об.'
                   value={topObjectsConfig.opersCount}
                   disabled={loading}
-                  onChange={(e) => topObjectsConfigChangeHandler(e, 'opersCount', 0)}
-                  onChange2={(e) => topObjectsConfigChangeHandler(e, 'opersCount', 1)}
+                  onChange={(e) => objectsConfigChangeHandler(e, 'opersCount', 0)}
+                  onChange2={(e) => objectsConfigChangeHandler(e, 'opersCount', 1)}
                 />
                 <ConfigLine
                   title='Длина операции'
                   value={topObjectsConfig.opersLength}
                   disabled={loading}
-                  onChange={(e) => topObjectsConfigChangeHandler(e, 'opersLength', 0)}
-                  onChange2={(e) => topObjectsConfigChangeHandler(e, 'opersLength', 1)}
+                  onChange={(e) => objectsConfigChangeHandler(e, 'opersLength', 0)}
+                  onChange2={(e) => objectsConfigChangeHandler(e, 'opersLength', 1)}
                 />
                 <ConfigLine
                   title='Интервал генерации (сек)'
@@ -512,14 +502,36 @@ export default () => {
                 />
               </>
             )}
+            {!showPrefs && (
+              <div className='flex flex-col gap-2 text-sm'>
+                <div className='flex justify-around'>
+                  <div className='flex'>
+                    <img src={lmb} className='h-6 w-6 object-contain' />
+                    Перемещение
+                  </div>
+                  <div className='flex'>
+                    <img src={scroll} className='h-6 w-6 object-contain' />
+                    Масштабирование
+                  </div>
+                </div>
+                <p className='w-72 '>
+                  Средства управления зависят от текущего положения курсора – попробуйте
+                  использовать их на разных осях, а также в верхней и нижней частях графика.
+                </p>
+                <p className='w-72'>
+                  {`Все объекты интерактивны – нажмите на линюю чтобы выбрать объект. Для отмены
+                  выбора нажмите ✖ в поле "Выбранный ID" ниже.`}
+                </p>
+              </div>
+            )}
           </div>
           <div className='flex gap-2'>
             <button
               title={showPrefs ? 'Скрыть параметры генерации' : 'Показать параметры генерации'}
               className='text-aTextWhite hover:text-white active:animate-aFadeIn'
-              onMouseDown={() => setShowPrefs((s) => !s)}
+              onMouseDown={toggleShowPrefs}
             >
-              {showPrefs ? <MdExtensionOff size={24} /> : <MdExtension size={24} />}
+              {showPrefsIcon}
             </button>
             <button
               key={String(loading)}
@@ -538,11 +550,13 @@ export default () => {
                   {object ?? 'Не выбран'}
                 </div>
               </div>
-              {object && (
-                <button className='animate-aFadeInScale' onClick={() => objectSet()}>
-                  ✖
-                </button>
-              )}
+              <button
+                className='transition-all disabled:cursor-not-allowed disabled:opacity-50'
+                disabled={!object}
+                onClick={() => objectSet()}
+              >
+                ✖
+              </button>
             </div>
             <div className='flex gap-1'>
               <div>Секторов на экране:</div>
@@ -550,7 +564,7 @@ export default () => {
             </div>
             <div className='flex gap-1'>
               <div>Объектов в буфере:</div>
-              <div className='animate-aFadeInScale'>{length}</div>
+              <div className='animate-aFadeInScale'>{objectsInBuffer}</div>
             </div>
           </div>
         </div>
@@ -572,7 +586,7 @@ export default () => {
             currentlyMoving={xyMoving}
             onMove={moveHandler}
           >
-            {/*//TODO FIX */}
+            {/*//? Заполнить Viewport при пустом буфере для рассчета высоты */}
             <Line from={new Point(0, 0)} to={new Point(0, MLN)} alpha={0} />
             {xAxisLines}
             {yAxisLines}
@@ -603,7 +617,7 @@ export default () => {
   );
 };
 
-export const openNewTab = (url: string): void => {
+const openNewTab = (url: string): void => {
   const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
   if (newWindow) newWindow.opener = null;
 };

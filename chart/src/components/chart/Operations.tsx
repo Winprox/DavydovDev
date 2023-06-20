@@ -2,7 +2,7 @@ import { Point, TextStyle } from 'pixi.js';
 import { FC, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { BGText, Line } from '..';
 
-const MLN = 1000000;
+const MLN = 1e6;
 const MS_IN_MIN = 60000;
 const MIN_IN_HOUR = 60;
 const OPERS_FONT_SIZE = 11;

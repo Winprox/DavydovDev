@@ -1,4 +1,4 @@
-import { Button, Card, Image, MarkDown, ProjectCard, ProjectModal, cm, openNewTab, } from '@local/components'; // prettier-ignore
+import { Button, Card, Image, MarkDown, ProjectCard, ProjectModal, cm, openNewTab } from '@local/components'; // prettier-ignore
 import { FC, HTMLAttributes, UIEvent, useEffect, useRef, useState } from 'react';
 import { BsTelephoneFill } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';

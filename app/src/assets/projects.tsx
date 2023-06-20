@@ -1,4 +1,4 @@
-import { Button, Stack, TCarousel, TImage, TStackItem, cm, openNewTab, } from '@local/components'; // prettier-ignore
+import { Button, Stack, TCarousel, TImage, TStackItem, cm, openNewTab } from '@local/components'; // prettier-ignore
 import { ReactNode } from 'react';
 import { BsGooglePlay } from 'react-icons/bs';
 import { HiDocumentText } from 'react-icons/hi';
@@ -32,7 +32,7 @@ import StickCross0 from './pictures/stickcross/0.jpg';
 import StickCross1 from './pictures/stickcross/1.jpg';
 import StickCrossBanner from './pictures/stickcross/banner.jpg';
 
-const chartSourcesUrl = 'https://github.com/Winprox/DavydovDev/tree/main';
+const chartSourcesUrl = 'https://github.com/Winprox/DavydovDev';
 const chartUrl = 'chart';
 const asuterUrl = 'https://asu-ter.web.app/';
 const gmedUrl = 'https://gmeddemo.web.app/book';

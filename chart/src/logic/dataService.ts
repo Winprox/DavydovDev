@@ -1,6 +1,6 @@
-import { TObject, TObjectPoint, TObjectTop, TObjectsConfig, TTopObjectsConfig, TType, } from './@types'; // prettier-ignore
+import { TObject, TObjectPoint, TObjectTop, TObjectsConfig, TTopObjectsConfig, TType } from './@types'; // prettier-ignore
 
-const MS_IN_MIN = 60000;
+export const MS_IN_MIN = 60000;
 const COLORS = [0xec407a, 0xab47bc, 0x66bb6a, 0xffa726];
 
 export const getTypes = async (typesCount: number) => {
