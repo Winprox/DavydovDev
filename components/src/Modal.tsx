@@ -9,12 +9,12 @@ const variants = cva('fixed left-0 top-0 h-full w-full transition-all', {
   variants: {
     variant: { default: '', dim: 'backdrop-blur-sm filter' },
     theme: { light: '', dark: '' },
-    fadeIn: { true: 'animate-aFadeIn', false: '' },
+    fadeIn: { true: 'animate-aFadeIn', false: '' }
   },
   compoundVariants: [
     { variant: 'dim', theme: 'light', className: 'bg-black bg-opacity-5' },
-    { variant: 'dim', theme: 'dark', className: 'bg-black bg-opacity-25' },
-  ],
+    { variant: 'dim', theme: 'dark', className: 'bg-black bg-opacity-25' }
+  ]
 });
 
 export type TBackdrop = Omit<HTMLAttributes<HTMLDivElement>, keyof CVAProps> & CVAProps;

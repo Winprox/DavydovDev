@@ -21,5 +21,5 @@ const args = {  className: 'w-full h-full flex items-center justify-center',  ch
 export const Default: Story = { render: (p) => <Component {...p} />, args };
 export const Dim: Story = {
   render: (p) => <Component {...p} />,
-  args: { ...args, backdropProps: { variant: 'dim' } },
+  args: { ...args, backdropProps: { variant: 'dim' } }
 };

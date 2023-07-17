@@ -5,7 +5,7 @@ import { cm } from '.';
 type CVAProps = VariantProps<typeof variants>;
 const variants = cva('h-full animate-aShimmer', {
   defaultVariants: { theme: 'light' },
-  variants: { theme: { dark: 'bg-aShimmer', light: 'bg-aShimmerLight' } },
+  variants: { theme: { dark: 'bg-aShimmer', light: 'bg-aShimmerLight' } }
 });
 
 export type TShimmer = Omit<HTMLAttributes<HTMLDivElement>, keyof CVAProps> & CVAProps;

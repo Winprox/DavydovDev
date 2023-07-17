@@ -34,7 +34,7 @@ const ViewportComponent = PixiComponent('Viewport', {
   willUnmount: (v, c) => {
     v.destroy();
     c.destroy();
-  },
+  }
 });
 
 export const Viewport = forwardRef<TViewportRef, TViewport>(
@@ -59,7 +59,7 @@ export const Viewport = forwardRef<TViewportRef, TViewport>(
         if (!vp) return;
         vp.moveCorner(x, y);
         onMoveHandler(vp);
-      },
+      }
     }));
 
     //? Отслеживает изменения ViewportBounds
@@ -132,7 +132,7 @@ export const Viewport = forwardRef<TViewportRef, TViewport>(
             : null,
         bottom: p.clampOptions?.yTo ? p.clampOptions?.yTo * yScale : null,
         right: p.clampOptions?.xTo ? p.clampOptions?.xTo * xScale : null,
-        underflow: 'center',
+        underflow: 'center'
       });
     }, [vpRef, p.clampOptions, xScale, yScale]);
 

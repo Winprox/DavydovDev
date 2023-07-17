@@ -59,7 +59,7 @@ export const getTopObjects = async (
       { length: rndBetween(config.opersCount[0], config.opersCount[1]) },
       (_, i) => ({
         type: `Операция #${i}`,
-        length: rndBetween(config.opersLength[0], config.opersLength[1]),
+        length: rndBetween(config.opersLength[0], config.opersLength[1])
       })
     );
     map.set(id, { id, typeId, arrival, opers });

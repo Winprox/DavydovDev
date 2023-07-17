@@ -54,7 +54,7 @@ export const Line = PixiComponent<TLine, Graphics>('Line', {
 
     g.cullArea = rect;
     g.zIndex = zIndex;
-  },
+  }
 });
 
 export type TGridLine = {
@@ -74,5 +74,5 @@ export const GridLine = PixiComponent<TGridLine, Graphics>('GridLine', {
     const posScaled = p.pos * scale;
     if (p.vertical) g.moveTo(posScaled, p.from).lineTo(posScaled, p.to);
     else g.moveTo(p.from, posScaled).lineTo(p.to, posScaled);
-  },
+  }
 });

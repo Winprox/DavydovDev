@@ -94,7 +94,7 @@ export const projects: Project[] = [
       Stack.pixi,
       Stack.leaflet,
       Stack.storybook,
-      Stack.scss,
+      Stack.scss
     ],
     stack: [
       Stack.pnpm,
@@ -121,8 +121,8 @@ export const projects: Project[] = [
       Stack.node,
       Stack.express,
       Stack.clickhouse,
-      Stack.docker,
-    ],
+      Stack.docker
+    ]
   },
   {
     id: 'energy-cost-management',
@@ -152,7 +152,7 @@ export const projects: Project[] = [
       Stack.responsiveFramework,
       Stack.node,
       Stack.express,
-      Stack.postgres,
+      Stack.postgres
     ],
     stack: [
       Stack.dart,
@@ -161,8 +161,8 @@ export const projects: Project[] = [
       Stack.responsiveFramework,
       Stack.node,
       Stack.express,
-      Stack.postgres,
-    ],
+      Stack.postgres
+    ]
   },
   {
     id: 'medical-scheduling',
@@ -192,7 +192,7 @@ export const projects: Project[] = [
       Stack.responsiveFramework,
       Stack.shelf,
       Stack.firebase,
-      Stack.stripe,
+      Stack.stripe
     ],
     stack: [
       Stack.dart,
@@ -201,8 +201,8 @@ export const projects: Project[] = [
       Stack.responsiveFramework,
       Stack.shelf,
       Stack.firebase,
-      Stack.stripe,
-    ],
+      Stack.stripe
+    ]
   },
   {
     id: 'ai-game',
@@ -234,7 +234,7 @@ export const projects: Project[] = [
     ),
     desc: HauntedManor,
     cardStack: [Stack.cSharp, Stack.unity, Stack.tensorflow],
-    stack: [Stack.cSharp, Stack.unity, Stack.tensorflow],
+    stack: [Stack.cSharp, Stack.unity, Stack.tensorflow]
   },
   {
     id: 'platformer-game',
@@ -258,7 +258,7 @@ export const projects: Project[] = [
       </Button>
     ),
     cardStack: [Stack.cSharp, Stack.unity],
-    stack: [Stack.cSharp, Stack.unity],
+    stack: [Stack.cSharp, Stack.unity]
   },
   {
     id: 'counter-app',
@@ -281,6 +281,6 @@ export const projects: Project[] = [
     ),
     desc: ScoreKeeper,
     cardStack: [Stack.kotlin, Stack.android, Stack.androidStudio],
-    stack: [Stack.kotlin, Stack.android, Stack.androidStudio],
-  },
+    stack: [Stack.kotlin, Stack.android, Stack.androidStudio]
+  }
 ];

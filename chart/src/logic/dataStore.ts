@@ -1,7 +1,7 @@
 import { Point } from 'pixi.js';
 import { TObject, TObjectDataPrimitive, TObjectPoint, TObjectPrimitive, TObjectTop, TObjectTopPrimitive, TObjectsConfig, TTopObjectsConfig, TType } from './@types'; // prettier-ignore
 import { MS_IN_MIN, getObjects, getTopObjects, getTypes } from './dataService';
-import { TStore, create } from './zustand';
+import { TStore, create } from './utils';
 
 const dateDay = (date: Date) =>
   new Date(
@@ -23,11 +23,11 @@ const DEFAULT_OBJECTS_CONFIG: TObjectsConfig = {
   stayingTimeDivider: 2,
   startTime: [0, 0],
   notArrivedChance: 10,
-  notArrivedKm: [1, 500],
+  notArrivedKm: [1, 500]
 };
 const DEFAULT_TOP_OBJECTS_CONFIG: TTopObjectsConfig = {
   opersCount: [2, 10],
-  opersLength: [1, 100],
+  opersLength: [1, 100]
 };
 
 type TState = {
@@ -87,13 +87,13 @@ export const dataStore: TStore<TState> = create<TState>(
       objects: DEFAULT_OBJECTS_CONFIG,
       setObjects: (objects) =>
         set((s) => ({
-          config: { ...s.config, objects: { ...s.config.objects, ...objects } },
+          config: { ...s.config, objects: { ...s.config.objects, ...objects } }
         })),
       topObjects: DEFAULT_TOP_OBJECTS_CONFIG,
       setTopObjects: (topObjects) =>
         set((s) => ({
-          config: { ...s.config, topObjects: { ...s.config.topObjects, ...topObjects } },
-        })),
+          config: { ...s.config, topObjects: { ...s.config.topObjects, ...topObjects } }
+        }))
     },
     types: {
       loading: false,
@@ -106,7 +106,7 @@ export const dataStore: TStore<TState> = create<TState>(
           .then((list) => set((s) => ({ types: { ...s.types, list } })))
           .catch((error) => set((s) => ({ types: { ...s.types, list: [], error } })))
           .finally(() => set((s) => ({ types: { ...s.types, loading: false } })));
-      },
+      }
     },
     objects: {
       loading: false,
@@ -168,7 +168,7 @@ export const dataStore: TStore<TState> = create<TState>(
         }
 
         set((s) => ({ objects: { ...s.objects, timeMap } }));
-      },
+      }
     },
     topObjects: {
       loading: false,
@@ -210,7 +210,7 @@ export const dataStore: TStore<TState> = create<TState>(
         });
 
         set((s) => ({ topObjects: { ...s.topObjects, timeMap } }));
-      },
+      }
     },
     dates: {
       start: dateDay(new Date()),
@@ -222,8 +222,8 @@ export const dataStore: TStore<TState> = create<TState>(
         const { autoStartTime, setObjects } = get().config;
         if ((!autoStartTime && !fromAutoStartTimeChange) || !from || !to) return;
         setObjects({ startTime: [from, to] });
-      },
-    },
+      }
+    }
   }),
   //? Рассчитывает относительное время прибытия
   [(s) => s.dates.from, () => dataStore.getState().dates.toConfig()],

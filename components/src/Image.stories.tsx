@@ -12,6 +12,6 @@ export const imageBlurred: Story = {
     title: 'React',
     titleProps: { className: 'text-aTextWhite' },
     blurred: true,
-    ...args,
-  },
+    ...args
+  }
 };

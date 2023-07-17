@@ -9,8 +9,8 @@ const variants = cva(
     defaultVariants: { variant: undefined, shadowVariant: undefined },
     variants: {
       variant: { rounded: 'rounded-3xl', circle: 'rounded-full aspect-square' },
-      shadowVariant: { light: 'shadow-aCard', dark: 'shadow-aCardWhite' },
-    },
+      shadowVariant: { light: 'shadow-aCard', dark: 'shadow-aCardWhite' }
+    }
   }
 );
 

@@ -10,9 +10,9 @@ const variants = cva(
     variants: {
       theme: {
         dark: 'shadow-aCardWhite bg-aTextBlack text-aTextWhite',
-        light: 'shadow-aCard bg-white text-aTextBlack',
-      },
-    },
+        light: 'shadow-aCard bg-white text-aTextBlack'
+      }
+    }
   }
 );
 
@@ -44,7 +44,7 @@ export const Card: FC<TCard> = ({
       boundsRef.current = cardRef.current.getBoundingClientRect();
       const center = {
         x: e.clientX - boundsRef.current.x - boundsRef.current.width / 2,
-        y: e.clientY - boundsRef.current.y - boundsRef.current.height / 2,
+        y: e.clientY - boundsRef.current.y - boundsRef.current.height / 2
       };
 
       if (rotateFactor !== 0) {
@@ -57,7 +57,7 @@ export const Card: FC<TCard> = ({
       glowRef.current.style.background = `radial-gradient(circle at
       ${center.x + boundsRef.current.width / 2}px
       ${center.y + boundsRef.current.height / 2}px,
-      rgba(${theme === 'dark' ? '255, 255, 255, 0.05' : '255, 0, 255, 0.05'}),
+      rgba(${theme === 'dark' ? '255, 255, 255, 0.05' : '256, 0, 256, 0.075'}),
       transparent, transparent)`;
 
       onMouseMove?.(e);

@@ -14,5 +14,5 @@ export const carousel: Story = {
         <div className='h-full bg-red-900' />
       </Carousel>
     </div>
-  ),
+  )
 };

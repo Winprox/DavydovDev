@@ -31,8 +31,8 @@ const variants = cva(
           'text-aTextWhite bg-aPrimary bg-opacity-70 backdrop-blur-sm',
           'shadow-aCardPrimary disabled:text-opacity-25'
         ),
-        transparent: cm('rounded-none text-left disabled:text-opacity-25'),
-      },
+        transparent: cm('rounded-none text-left disabled:text-opacity-25')
+      }
     },
     compoundVariants: [
       {
@@ -42,7 +42,7 @@ const variants = cva(
           'text-aPrimary border-aPrimary',
           'hover:text-aPrimaryDark hover:border-aPrimaryDark',
           'disabled:hover:text-aPrimary disabled:hover:border-aPrimary'
-        ),
+        )
       },
       {
         variant: 'outline',
@@ -51,11 +51,11 @@ const variants = cva(
           'text-aTextWhite border-aTextWhite',
           'hover:text-aPrimary hover:border-aPrimary',
           'disabled:hover:text-aTextWhite disabled:hover:border-aTextWhite'
-        ),
+        )
       },
       { variant: 'transparent', theme: 'light', class: 'text-aPrimary' },
-      { variant: 'transparent', theme: 'dark', class: 'text-aTextWhite' },
-    ],
+      { variant: 'transparent', theme: 'dark', class: 'text-aTextWhite' }
+    ]
   }
 );
 

@@ -33,7 +33,7 @@ export const AxisEntry: FC<TAxisEntry> = ({
     ...textStyle,
     fontWeight: selected ? '900' : '400',
     wordWrap: !vertical,
-    wordWrapWidth: to ? to * textWidthPercent : undefined,
+    wordWrapWidth: to ? to * textWidthPercent : undefined
   });
 
   return (

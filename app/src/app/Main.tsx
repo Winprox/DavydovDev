@@ -1,5 +1,5 @@
 import { Button, Card, Image, MarkDown, ProjectCard, ProjectModal, cm, openNewTab } from '@local/components'; // prettier-ignore
-import { FC, HTMLAttributes, UIEvent, useEffect, useRef, useState } from 'react';
+import { FC, HTMLAttributes, KeyboardEvent, UIEvent, useEffect, useRef, useState } from 'react'; // prettier-ignore
 import { BsTelephoneFill } from 'react-icons/bs';
 import { IoIosArrowUp } from 'react-icons/io';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -148,7 +148,7 @@ export default () => {
           {showContactsButton && (
             <Button
               tabIndex={project ? -1 : 1}
-              className='flex animate-aFadeIn gap-2'
+              className='z-40 flex animate-aFadeIn gap-2'
               onClick={() =>
                 contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
               }
@@ -168,7 +168,7 @@ export default () => {
               className='active:hover:scale-110'
               tabIndex={project ? -1 : 10 + i}
               onClick={() => setSelectedProjectId(id)}
-              onKeyDown={(e) => e.key === 'Enter' && setSelectedProjectId(id)}
+              onKeyDown={(e: KeyboardEvent) => e.key === 'Enter' && setSelectedProjectId(id)}
             >
               <ProjectCard
                 theme={theme}
@@ -190,7 +190,7 @@ export default () => {
               className='active:hover:scale-110'
               tabIndex={project ? -1 : 100 + i}
               onClick={() => openNewTab(url)}
-              onKeyDown={(e) => e.key === 'Enter' && openNewTab(url)}
+              onKeyDown={(e: KeyboardEvent) => e.key === 'Enter' && openNewTab(url)}
             >
               <Card
                 key={title}
@@ -220,7 +220,7 @@ export default () => {
               variant='transparent'
               className='flex items-center gap-2 text-lg'
               onClick={() => openNewTab(url)}
-              onKeyDown={(e) => e.key === 'Enter' && openNewTab(url)}
+              onKeyDown={(e: KeyboardEvent) => e.key === 'Enter' && openNewTab(url)}
             >
               {icon}
               {title}

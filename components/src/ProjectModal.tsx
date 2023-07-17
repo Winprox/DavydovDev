@@ -43,7 +43,7 @@ export const ProjectModal: FC<TProjectModal> = ({ onClose, ...p }) => {
         ...p.modalProps?.backdropProps,
         theme: p.modalProps?.backdropProps?.theme ?? p.theme,
         variant: p.modalProps?.backdropProps?.variant ?? 'dim',
-        className: cm('animate-aFadeIn', p.modalProps?.backdropProps?.className),
+        className: cm('animate-aFadeIn', p.modalProps?.backdropProps?.className)
       }}
       className={cm(
         'flex h-full w-full animate-aFadeIn items-center justify-center',
@@ -61,7 +61,7 @@ export const ProjectModal: FC<TProjectModal> = ({ onClose, ...p }) => {
             'h-full w-full mx-0 transition-all',
             'sm:h-3/4 sm:mx-10 sm:max-w-screen-md',
             'smallHeight:h-full smallHeight:py-2'
-          ),
+          )
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -98,7 +98,7 @@ export const ProjectModal: FC<TProjectModal> = ({ onClose, ...p }) => {
                           'h-full',
                           (p.carouselProps?.slidesToShow ?? 1) > 1 && 'px-1',
                           p.imageProps?.wrapperProps?.className
-                        ),
+                        )
                       }}
                       onLoad={() => {
                         setShimmer(false);

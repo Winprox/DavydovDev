@@ -5,7 +5,7 @@ import { Y_AXIS_WIDTH } from '../app/Main';
 import { AxisEntry, BGText, GridLine, Line, Operations, TViewportBounds } from '../components';
 import { TObjectDataPrimitive, TObjectPrimitive, TObjectTopPrimitive, TType } from './@types';
 import { KM_GRID_STEP, TIME_GRID_STEP, dataStore } from './dataStore';
-import { proxy } from './zustand';
+import { proxy } from './utils';
 
 type Grid = { kms: number[][]; kmsIndexes: number[]; times: number[][]; timesKeys: string[] };
 const GRID_DEFAULT: Grid = { kms: [], kmsIndexes: [], times: [], timesKeys: [] };
@@ -57,7 +57,7 @@ const STATE_DEFAULT = {
   gridPrevTop: GRID_TOP_DEFAULT,
   xScale: X_SCALE_STEPS[3],
   yScale: Y_SCALE_STEPS[2],
-  yScaleTop: Y_TOP_SCALE_MIN + Y_TOP_SCALE_STEP,
+  yScaleTop: Y_TOP_SCALE_MIN + Y_TOP_SCALE_STEP
 };
 
 let clearOffscreenTimeoutId: NodeJS.Timeout | undefined = undefined;
@@ -305,7 +305,7 @@ export const bufferStore = create<TState>((set, get) => ({
         xAxisBuffer: [...xAxisMap.values()].flat(),
         xAxisLinesBuffer: [...xAxisLinesMap.values()].flat(),
         yAxisBuffer: [...yAxisMap.values()].flat(),
-        yAxisLinesBuffer: [...yAxisLinesMap.values()].flat(),
+        yAxisLinesBuffer: [...yAxisLinesMap.values()].flat()
       });
     }, 0);
   },
@@ -358,7 +358,7 @@ export const bufferStore = create<TState>((set, get) => ({
     setTimeout(() => {
       set({
         yAxisTopBuffer: [...yAxisTopMap.values()],
-        yAxisTopLinesBuffer: [...yAxisTopLinesMap.values()],
+        yAxisTopLinesBuffer: [...yAxisTopLinesMap.values()]
       });
     }, 0);
   },
@@ -538,18 +538,18 @@ export const bufferStore = create<TState>((set, get) => ({
     startDate: dataStore.getState().dates.start,
     types: dataStore.getState().types.list,
     objectsTimeMap: dataStore.getState().objects.timeMap,
-    topObjectsTimeMap: dataStore.getState().topObjects.timeMap,
-  },
+    topObjectsTimeMap: dataStore.getState().topObjects.timeMap
+  }
 }));
 
 proxy(
   dataStore,
   bufferStore,
-  [(s) => s.config.object, 'object'],
-  [(s) => s.dates.start, 'startDate'],
-  [(s) => s.types.list, 'types'],
-  [(s) => s.objects.timeMap, 'objectsTimeMap'],
-  [(s) => s.topObjects.timeMap, 'topObjectsTimeMap']
+  [(s) => s.config.object, (s) => s.proxy.object],
+  [(s) => s.dates.start, (s) => s.proxy.startDate],
+  [(s) => s.types.list, (s) => s.proxy.types],
+  [(s) => s.objects.timeMap, (s) => s.proxy.objectsTimeMap],
+  [(s) => s.topObjects.timeMap, (s) => s.proxy.topObjectsTimeMap]
 );
 
 const _generateLine = (
@@ -585,7 +585,7 @@ const _generateLine = (
         alpha={objectNotSelected ? 0.33 : 1}
         zIndex={objectSelected ? 1000 : undefined}
         onUp={objectHandler}
-      />,
+      />
     ]);
   } else {
     const d = data as TObjectDataPrimitive;
@@ -629,7 +629,7 @@ const _generateLine = (
             />
           )
         }
-      </Fragment>,
+      </Fragment>
     ]);
   }
 };
@@ -670,7 +670,7 @@ const _generateLineTop = (
       selectedColor={SELECTED_COLOR}
       zIndex={objectSelected ? MLN * 2 : MLN + data.timeFrom}
       onSelect={object !== data.id ? () => setObject(data.id) : undefined}
-    />,
+    />
   ]);
 };
 

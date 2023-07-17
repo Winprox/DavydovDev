@@ -16,7 +16,7 @@ export const Y_AXIS_WIDTH = 110;
 const STAGE_CONFIG = {
   antialias: true,
   powerPreference: 'high-performance',
-  background: 0x222034,
+  background: 0x222034
 } as _ReactPixi.IStage;
 
 export default () => {

@@ -41,7 +41,7 @@ const BGComponent = PixiComponent<TBGComponent, Graphics>('TextBG', {
       radius = 0,
       xAnchor = 'center',
       yAnchor = 'top',
-      zIndex = 0,
+      zIndex = 0
     }
   ) => {
     g.clear().lineStyle({ width: 0 }).beginFill(color, alpha);
@@ -65,7 +65,7 @@ const BGComponent = PixiComponent<TBGComponent, Graphics>('TextBG', {
 
     g.cullArea = new Rectangle(pos.x, pos.y, 1, 1);
     g.zIndex = zIndex;
-  },
+  }
 });
 
 export type TBGText = TBGComponent & { noBg?: boolean; xScale?: number; yScale?: number };
@@ -88,7 +88,7 @@ export const BGText: FC<TBGText> = ({
     fill:
       textStyle?.fill ?? !noBg
         ? calculateBGBasedColor(color, FONT_WHITE, FONT_BLACK)
-        : FONT_WHITE,
+        : FONT_WHITE
   };
 
   return (
@@ -103,7 +103,7 @@ export const BGText: FC<TBGText> = ({
         style={style as TextStyle}
         anchor={[
           p.xAnchor ? (p.xAnchor === 'center' ? 0.5 : p.xAnchor === 'left' ? 1 : 0) : 0.5,
-          p.yAnchor ? (p.yAnchor === 'center' ? 0.5 : p.yAnchor === 'top' ? 1 : 0) : 1,
+          p.yAnchor ? (p.yAnchor === 'center' ? 0.5 : p.yAnchor === 'top' ? 1 : 0) : 1
         ]}
         zIndex={p.zIndex ? p.zIndex + 1 : 0}
       />
